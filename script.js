@@ -115,11 +115,11 @@ const MAX_YEAR = 2030;
 
 // Bildirim İzni ve Kaydı
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+    navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error:", err));
 }
 
 function sendNotification(title, body) {
-    if (Notification.permission === 'granted') {
+    if (Notification && Notification.permission === 'granted') {
         navigator.serviceWorker.ready.then(registration => {
             registration.showNotification(title, {
                 body: body,
@@ -149,19 +149,25 @@ const saveSettingsBtn = document.getElementById('save-settings');
 const closeSettingsBtn = document.getElementById('close-settings');
 const alarmOverlay = document.getElementById('alarm-overlay');
 const dismissAlarmBtn = document.getElementById('dismiss-alarm');
+const enableNotificationsBtn = document.getElementById('enable-notifications');
 
 // Initialize
 function init() {
-    populateYearSelect();
-    startTicker();
-    if (startDate) {
-        updateUI();
-    } else {
-        settingsModal.classList.remove('hidden');
+    try {
+        populateYearSelect();
+        startTicker();
+        if (startDate) {
+            updateUI();
+        } else {
+            if(settingsModal) settingsModal.classList.remove('hidden');
+        }
+    } catch (e) {
+        console.error("Başlatma hatası:", e);
     }
 }
 
 function populateYearSelect() {
+    if(!yearSelect) return;
     const currentYear = new Date().getFullYear();
     for (let y = currentYear; y <= MAX_YEAR; y++) {
         const opt = document.createElement('option');
@@ -173,16 +179,17 @@ function populateYearSelect() {
 }
 
 function startTicker() {
+    if(!tickerContent) return;
     let index = 0;
     const updateTicker = () => {
         tickerContent.style.animation = 'none';
-        tickerContent.offsetHeight; // Trigger reflow
+        void tickerContent.offsetHeight; // Reflow
         tickerContent.style.animation = 'slideUp 0.5s ease-out';
         tickerContent.textContent = messages[index];
         index = (index + 1) % messages.length;
     };
     updateTicker();
-    setInterval(updateTicker, 6000); // 6 saniyede bir değişir
+    setInterval(updateTicker, 6000);
 }
 
 // Logic
@@ -192,10 +199,8 @@ function getNextInjection(start) {
     let current = new Date(start);
     current.setHours(0, 0, 0, 0);
 
-    // If start date is in the future, first injection is the start date
     if (current > today) return current;
 
-    // Calculate cycles
     while (current < today) {
         current.setDate(current.getDate() + INTERVAL_DAYS);
     }
@@ -204,6 +209,7 @@ function getNextInjection(start) {
 
 function getAllInjections(start, endYear) {
     const dates = [];
+    if(!start) return dates;
     let current = new Date(start);
     current.setHours(0, 0, 0, 0);
     const end = new Date(endYear, 11, 31);
@@ -216,6 +222,7 @@ function getAllInjections(start, endYear) {
 }
 
 function updateUI() {
+    if(!startDate) return;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
@@ -223,21 +230,18 @@ function updateUI() {
     const diffTime = nextDate - today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    // Update Status Card
-    daysLeftEl.textContent = diffDays;
-    nextDateStrEl.textContent = nextDate.toLocaleDateString('tr-TR');
+    if(daysLeftEl) daysLeftEl.textContent = diffDays;
+    if(nextDateStrEl) nextDateStrEl.textContent = nextDate.toLocaleDateString('tr-TR');
 
-    // Monday Check (Every Monday)
-    const isMonday = today.getDay() === 1; // 1 is Monday
-    if (isMonday) {
+    const isMonday = today.getDay() === 1;
+    if (isMonday && mondayWarningEl) {
         mondayWarningEl.classList.remove('hidden');
         sendNotification("Haftalık Hatırlatma", "Bugün Pazartesi, kızınızın aşısını vurdurmayı unutmayın!");
-    } else {
+    } else if(mondayWarningEl) {
         mondayWarningEl.classList.add('hidden');
     }
 
-    // Alarm Check (Injection Day)
-    if (diffDays === 0) {
+    if (diffDays === 0 && alarmOverlay) {
         alarmOverlay.classList.remove('hidden');
         sendNotification("ACİL: İĞNE GÜNÜ!", "Lütfen bugün kızınızın iğnesini yaptırmayı unutmayın.");
     }
@@ -247,12 +251,10 @@ function updateUI() {
 }
 
 function renderCalendar() {
+    if(!calendarGrid || !yearSelect || !startDate) return;
     calendarGrid.innerHTML = '';
     const selectedYear = parseInt(yearSelect.value);
     const injections = getAllInjections(startDate, MAX_YEAR);
-    
-    // Monthly view logic or just list of injection months?
-    // For simplicity and user request "2030 takvimi", we show a list of injections for that year
     const yearInjections = injections.filter(d => d.getFullYear() === selectedYear);
 
     if (yearInjections.length === 0) {
@@ -270,6 +272,7 @@ function renderCalendar() {
 }
 
 function renderUpcoming() {
+    if(!upcomingList || !startDate) return;
     upcomingList.innerHTML = '';
     const injections = getAllInjections(startDate, MAX_YEAR);
     const today = new Date();
@@ -292,44 +295,46 @@ function renderUpcoming() {
     });
 }
 
-const enableNotificationsBtn = document.getElementById('enable-notifications');
-
 // Events
-settingsBtn.onclick = () => settingsModal.classList.remove('hidden');
-closeSettingsBtn.onclick = () => settingsModal.classList.add('hidden');
+if(settingsBtn) settingsBtn.onclick = () => settingsModal.classList.remove('hidden');
+if(closeSettingsBtn) closeSettingsBtn.onclick = () => settingsModal.classList.add('hidden');
 
-enableNotificationsBtn.onclick = () => {
-    if (!("Notification" in window)) {
-        alert("Bu tarayıcı bildirimleri desteklemiyor.");
-        return;
-    }
-    Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-            alert("Bildirimler başarıyla etkinleştirildi!");
-            sendNotification("Tebrikler!", "Bildirimler artık aktif. İğne günlerinde buradan uyarılacaksınız.");
-        } else {
-            alert("Bildirim izni reddedildi. Lütfen tarayıcı ayarlarından izin verin.");
+if(enableNotificationsBtn) {
+    enableNotificationsBtn.onclick = () => {
+        if (!("Notification" in window)) {
+            alert("Bu tarayıcı bildirimleri desteklemiyor.");
+            return;
         }
-    });
-};
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                alert("Bildirimler başarıyla etkinleştirildi!");
+                sendNotification("Tebrikler!", "Bildirimler artık aktif. İğne günlerinde buradan uyarılacaksınız.");
+            } else {
+                alert("Bildirim izni reddedildi. Lütfen tarayıcı ayarlarından izin verin.");
+            }
+        });
+    };
+}
 
-saveSettingsBtn.onclick = () => {
-    const val = startDateInput.value;
-    if (val) {
-        startDate = val;
-        localStorage.setItem('igne_start_date', val);
-        settingsModal.classList.add('hidden');
-        updateUI();
-    }
-};
+if(saveSettingsBtn) {
+    saveSettingsBtn.onclick = () => {
+        const val = startDateInput.value;
+        if (val) {
+            startDate = val;
+            localStorage.setItem('igne_start_date', val);
+            settingsModal.classList.add('hidden');
+            updateUI();
+        }
+    };
+}
 
-dismissAlarmBtn.onclick = () => {
-    alarmOverlay.classList.add('hidden');
-    // Optional: Auto-update to next cycle by saving today + 28 as new reference?
-    // No, keep original ref to maintain the strictly 28-day chain.
-};
+if(dismissAlarmBtn) {
+    dismissAlarmBtn.onclick = () => {
+        alarmOverlay.classList.add('hidden');
+    };
+}
 
-yearSelect.onchange = renderCalendar;
+if(yearSelect) yearSelect.onchange = renderCalendar;
 
 // Start the app
-init();
+window.onload = init;
