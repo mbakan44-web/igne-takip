@@ -1,0 +1,16 @@
+{
+  "name": "İğne Takip",
+  "short_name": "İğneTakip",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#fce4ec",
+  "theme_color": "#ff85a2",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2966/2966327.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
