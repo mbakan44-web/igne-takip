@@ -4,14 +4,251 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>İğne Takip | Kızım İçin</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff85a2">
+    <style>
+        :root {
+            --primary: #ff85a2;
+            --primary-dark: #f06292;
+            --secondary: #9c27b0;
+            --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #4a148c;
+            --text-muted: #7b1fa2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-circle {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .icon-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .ticker-wrapper {
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            overflow: hidden;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--glass-border);
+        }
+
+        .ticker-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-align: center;
+            width: 100%;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .main-status {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 133, 162, 0.2), rgba(156, 39, 176, 0.2));
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .countdown-display {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        #days-left {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .status-info {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        #monday-warning {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #e65100;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        h2 { font-size: 1.2rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .calendar-day.injection {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.4);
+        }
+
+        .list-container { display: flex; flex-direction: column; gap: 12px; }
+
+        .list-item {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .tag { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .tag.pink { background: #fce4ec; color: #ad1457; }
+
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center;
+            justify-content: center; padding: 20px; z-index: 1000;
+        }
+
+        .hidden { display: none !important; }
+
+        input[type="date"] {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px;
+            margin: 15px 0; font-family: inherit;
+        }
+
+        .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+        .primary-btn, .secondary-btn {
+            padding: 12px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer;
+        }
+        .primary-btn { background: var(--primary); color: white; }
+        .secondary-btn { background: #eee; color: #555; }
+
+        .alarm-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary); z-index: 2000; display: flex;
+            align-items: center; justify-content: center; text-align: center;
+            color: white; padding: 30px;
+        }
+
+        .alarm-icon { font-size: 5rem; animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header>
             <div class="logo-area">
                 <div class="icon-circle">💉</div>
@@ -20,14 +257,10 @@
             <button id="settings-btn" class="icon-btn">⚙️</button>
         </header>
 
-        <!-- Kayar Yazı Bandı -->
-        <div class="ticker-wrapper glass-card">
-            <div id="ticker-content" class="ticker-text">
-                Yükleniyor...
-            </div>
+        <div class="ticker-wrapper">
+            <div id="ticker-content" class="ticker-text">Yükleniyor...</div>
         </div>
 
-        <!-- Main Status Card -->
         <main>
             <div id="status-card" class="glass-card main-status">
                 <p class="status-label">Sıradaki İğneye Kalan</p>
@@ -41,56 +274,270 @@
                 </div>
             </div>
 
-            <!-- Calendar Section -->
             <section class="calendar-section">
-                <div class="section-header">
-                    <h2>İğne Takvimi</h2>
-                    <select id="year-select">
-                        <!-- Years will be populated up to 2030 -->
-                    </select>
-                </div>
-                <div id="calendar-grid" class="calendar-grid">
-                    <!-- Days will be generated by JS -->
-                </div>
+                <h2>İğne Takvimi <select id="year-select" style="font-size: 0.9rem; padding: 4px; border-radius: 8px;"></select></h2>
+                <div id="calendar-grid" class="calendar-grid"></div>
             </section>
 
-            <!-- Upcoming List -->
-            <section class="upcoming-section">
+            <section class="upcoming-section" style="margin-top: 25px;">
                 <h2>Gelecek Randevular</h2>
-                <div id="upcoming-list" class="list-container">
-                    <!-- Items will be generated -->
-                </div>
+                <div id="upcoming-list" class="list-container"></div>
             </section>
         </main>
 
-        <!-- Settings Modal -->
         <div id="settings-modal" class="modal hidden">
-            <div class="modal-content glass-card">
+            <div class="modal-content glass-card" style="background: white;">
                 <h3>Ayarlar</h3>
-                <label for="start-date">Son İğne Yapılan Tarih:</label>
+                <label for="start-date" style="display:block; margin-top:15px;">Son İğne Tarihi:</label>
                 <input type="date" id="start-date-input">
-                <p class="hint">Bu tarih temel alınarak 28 günde bir hesaplama yapılacaktır.</p>
                 <div class="modal-actions">
-                    <button id="enable-notifications" class="secondary-btn" style="background: #e1f5fe; color: #01579b; margin-bottom: 10px; width: 100%;">🔔 Bildirimleri Etkinleştir</button>
-                </div>
-                <div class="modal-actions">
+                    <button id="enable-notifications" class="secondary-btn" style="background: #e1f5fe; color: #01579b;">🔔 Bildirimleri Etkinleştir</button>
                     <button id="save-settings" class="primary-btn">Kaydet</button>
                     <button id="close-settings" class="secondary-btn">Kapat</button>
                 </div>
             </div>
         </div>
 
-        <!-- Alarm/Alert Notification -->
         <div id="alarm-overlay" class="alarm-overlay hidden">
             <div class="alarm-content">
                 <div class="alarm-icon">🚨</div>
-                <h2>İĞNE GÜNÜ!</h2>
-                <p>Lütfen bugün kızınızın iğnesini yaptırmayı unutmayın.</p>
-                <button id="dismiss-alarm" class="alarm-btn">Tamam, Yapıldı</button>
+                <h2 style="font-size: 2rem; margin: 20px 0;">İĞNE GÜNÜ!</h2>
+                <p>Lütfen bugün kızınızın iğnesini yapın.</p>
+                <button id="dismiss-alarm" style="background:white; color:var(--primary); border:none; padding:15px 40px; border-radius:30px; font-weight:700; margin-top:30px;">Tamam</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const messages = [
+            "💧 Bugün yeterince su içmeyi unutma!",
+            "✨ Harika bir gün dilerim, her şey yolunda gidecek.",
+            "🚫 Bugün polenler yoğun olabilir, dikkatli ol.",
+            "🍎 Sağlıklı beslenmek vücudunu güçlendirir.",
+            "🧴 Elleri sık sık yıkamak mikroplardan korur.",
+            "🌈 Gülümsemek en güzel ilaçtır!",
+            "🚶‍♂️ Kısa bir yürüyüş sana çok iyi gelebilir.",
+            "🧸 Kızın için en iyisini yapıyorsun, unutma.",
+            "☀️ Güneşli havalarda güneş kremi kullanmayı ihmal etme.",
+            "🥗 Sebze ağırlıklı beslenmek enerji verir.",
+            "😴 Düzenli uyku bağışıklık sistemini destekler.",
+            "📚 Bugün kızına bir masal okumaya ne dersin?",
+            "💖 Kendine zaman ayırmayı unutma, sen değerlisin.",
+            "🧼 Temiz hava her zaman iyi gelir, odayı havalandır.",
+            "🧘‍♀️ Derin bir nefes al ve rahatla.",
+            "🍯 Bir kaşık bal boğazı yumuşatır.",
+            "🥛 Kalsiyum kemik gelişimi için çok önemlidir.",
+            "🍓 Mevsim meyveleri en sağlıklı atıştırmalıktır.",
+            "🦋 Değişim yavaş yavaş gerçekleşir, sabırlı ol.",
+            "🌸 Bahar aylarında alerjilere karşı tedbirli ol.",
+            "🎨 Birlikte resim yapmak hayal gücünü geliştirir.",
+            "🎶 Müzik dinlemek ruhu dinlendirir.",
+            "🚲 Açık havada hareket etmek zinde tutar.",
+            "🏠 Evinizdeki huzur en büyük hazinedir.",
+            "🧠 Yeni bir şeyler öğrenmek zihni genç tutar.",
+            "🍵 Bitki çayları sakinleştirici etki yapar.",
+            "🦷 Diş fırçalamayı eğlenceli bir oyuna dönüştür.",
+            "🌻 Her zorluktan sonra bir kolaylık vardır.",
+            "🧡 Sevgi paylaştıkça çoğalır.",
+            "💪 Güçlü bir bağışıklık için C vitamini şart.",
+            "🥤 Şekerli içeceklerden uzak durmaya çalış.",
+            "🧶 Hobilerinle ilgilenmek stresi azaltır.",
+            "🧸 Kızının en sevdiği oyuncağıyla oyun kur.",
+            "🥧 Ev yapımı yiyecekler her zaman daha sağlıklıdır.",
+            "🚿 Ilık bir duş kasları rahatlatır.",
+            "🛹 Hareketli yaşam sağlıklı bir kalbin anahtarıdır.",
+            "🪁 Gökyüzüne bakmak ufku açar.",
+            "🎈 Küçük mutlulukların peşinden git.",
+            "🧄 Sarımsak doğal bir antibiyotiktir.",
+            "🧅 Soğan bağışıklığı güçlendiren mucizevi bir besindir.",
+            "🥜 Kuruyemişler zihin gelişimi için faydalıdır.",
+            "🥦 Brokoli tam bir vitamin deposudur.",
+            "🥕 Havuç göz sağlığı için vazgeçilmezdir.",
+            "🥑 Avokado sağlıklı yağlar içerir.",
+            "🥚 Yumurta en kaliteli protein kaynağıdır.",
+            "🐟 Haftada bir balık yemek beyin için iyidir.",
+            "🌾 Tam tahıllı ürünler tokluk hissi verir.",
+            "🍬 Paketli gıdaların içeriğine dikkat et.",
+            "🥛 Yoğurt sindirim sistemi için dosttur.",
+            "🧀 Peynir kemikleri güçlendiren kalsiyumdur.",
+            "🧤 Soğuk havalarda ellerini ve boynunu koru.",
+            "🧣 Atkı takmak boğaz ağrısını önler.",
+            "☔ Yağmurlu günlerde sıcacık bir çorba iç.",
+            "⚡ Enerjini yüksek tutmak için olumlu düşün.",
+            "🌟 Bugün senin parladığın gün olsun.",
+            "🤝 Yardımlaşmak dünyayı güzelleştirir.",
+            "🕊️ İç huzurunu korumaya odaklan.",
+            "🕰️ Zamanı verimli kullanmak stresi önler.",
+            "📱 Ekran süresini kısıtlamak gözleri dinlendirir.",
+            "🌳 Doğa ile iç içe olmak negatif enerjiyi atar.",
+            "🐚 Deniz havası ciğerlere iyi gelir.",
+            "⛰️ Temiz dağ havası zihni berraklaştırır.",
+            "🏕️ Doğada vakit geçirmek ruhu tazeler.",
+            "🎢 Hayat iniş ve çıkışlarla doludur, tadını çıkar.",
+            "🎡 Eğlenmek için her zaman bir neden bulabilirsin.",
+            "🎁 Beklenmedik sürprizler günü güzelleştirir.",
+            "🕯️ Loş bir ortamda dinlenmek uykuyu getirir.",
+            "🛌 Yatağa girmeden önce tüm teknolojik cihazları bırak.",
+            "🥛 Yatmadan önce içilen ılık süt rahatlatır.",
+            "💤 Kaliteli bir uyku için oda karanlık olmalı.",
+            "⏰ Sabah erken kalkmak güne enerjik başlatır.",
+            "🍳 Kahvaltı günün en önemli öğünüdür.",
+            "☕ Bir fincan kahve odaklanmayı artırır.",
+            "🍃 Nane çayı mideyi rahatlatır.",
+            "🍋 Limonlu su vücudu toksinlerden arındırır.",
+            "🥥 Hindistan cevizi yağı cildi besler.",
+            "🥨 Ara öğünlerde sağlıklı seçimler yap.",
+            "🍫 Bitter çikolata mutluluk hormonu salgılatır.",
+            "🍿 Film izlerken mısırı yağsız patlatmayı dene.",
+            "🍧 Dondurma yerken aşırıya kaçmamaya dikkat.",
+            "🍇 Üzüm kan yapıcı özelliğe sahiptir.",
+            "🍈 Kavun yaz aylarında harika bir ferahlatıcıdır.",
+            "🍉 Karpuz vücudun su ihtiyacını karşılar.",
+            "🍑 Şeftali lifli yapısıyla sindirime yardımcıdır.",
+            "🍒 Kiraz antioksidan kaynağıdır.",
+            "🍍 Ananas ödem atmaya yardımcı olur.",
+            " kiwi C vitamini bombasıdır.",
+            "🍅 Domates cildi güneşin etkilerinden korur.",
+            "🥔 Patatesi haşlanmış olarak tüketmek daha iyidir.",
+            "🍆 Patlıcan lif açısından zengindir.",
+            "🥒 Salatalık ferahlatıcı ve düşük kalorilidir.",
+            "🫑 Biberler bağışıklığı destekleyen vitaminler içerir.",
+            "🌿 Maydanoz vücudu arındırır.",
+            "☘️ Taze otlar yemeklere lezzet ve sağlık katar.",
+            "🥣 Kışın mercimek çorbası içmek şifadır.",
+            "🥢 Farklı kültürlerin mutfaklarını dene.",
+            "🥘 Tencere yemekleri her zaman daha besleyicidir.",
+            "🥡 Dışarıdan yemek yerine evde hazırlamayı seç.",
+            "🥤 Taze sıkılmış meyve suları enerji verir.",
+            "🍦 Evde meyveli yoğurt yaparak dondurmaya alternatif üret.",
+            "💖 Sen harika bir ebeveynsin, kendine güven.",
+            "🌈 Yarın bugün olduğundan daha güzel olacak."
+        ];
+
+        const INTERVAL_DAYS = 28;
+        const MAX_YEAR = 2030;
+        let startDate = localStorage.getItem('igne_start_date') || null;
+
+        const daysLeftEl = document.getElementById('days-left');
+        const nextDateStrEl = document.getElementById('next-date-str');
+        const tickerContent = document.getElementById('ticker-content');
+        const yearSelect = document.getElementById('year-select');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const upcomingList = document.getElementById('upcoming-list');
+        const settingsModal = document.getElementById('settings-modal');
+        const startDateInput = document.getElementById('start-date-input');
+        const alarmOverlay = document.getElementById('alarm-overlay');
+
+        function sendNotification(title, body) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: body });
+            }
+        }
+
+        function init() {
+            const currentYear = new Date().getFullYear();
+            for (let y = currentYear; y <= MAX_YEAR; y++) {
+                const opt = document.createElement('option');
+                opt.value = y; opt.textContent = y;
+                yearSelect.appendChild(opt);
+            }
+            startTicker();
+            if (startDate) updateUI();
+            else settingsModal.classList.remove('hidden');
+        }
+
+        function startTicker() {
+            let lastIdx = -1;
+            const update = () => {
+                let idx;
+                // Aynı mesajın üst üste gelmemesini sağlar
+                do {
+                    idx = Math.floor(Math.random() * messages.length);
+                } while (idx === lastIdx && messages.length > 1);
+                lastIdx = idx;
+
+                tickerContent.style.animation = 'none';
+                void tickerContent.offsetHeight;
+                tickerContent.style.animation = 'slideUp 0.5s ease-out';
+                tickerContent.textContent = messages[idx];
+            };
+            update(); setInterval(update, 6000);
+        }
+
+        function getNextInjection(start) {
+            const today = new Date(); today.setHours(0,0,0,0);
+            let current = new Date(start); current.setHours(0,0,0,0);
+            if (current > today) return current;
+            while (current < today) current.setDate(current.getDate() + INTERVAL_DAYS);
+            return current;
+        }
+
+        function updateUI() {
+            if(!startDate) return;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const next = getNextInjection(startDate);
+            const diffDays = Math.ceil((next - today) / (1000 * 60 * 60 * 24));
+            daysLeftEl.textContent = diffDays;
+            nextDateStrEl.textContent = next.toLocaleDateString('tr-TR');
+            if (today.getDay() === 1) {
+                document.getElementById('monday-warning').classList.remove('hidden');
+                sendNotification("Hatırlatma", "Bugün Pazartesi!");
+            }
+            if (diffDays === 0) {
+                alarmOverlay.classList.remove('hidden');
+                sendNotification("ACİL", "İğne günü!");
+            }
+            renderCalendar(); renderUpcoming();
+        }
+
+        function renderCalendar() {
+            calendarGrid.innerHTML = '';
+            const selYear = parseInt(yearSelect.value);
+            let current = new Date(startDate);
+            while (current.getFullYear() <= MAX_YEAR) {
+                if (current.getFullYear() === selYear) {
+                    const day = document.createElement('div');
+                    day.className = 'calendar-day injection';
+                    day.innerHTML = `<span>${current.getDate()}</span><small>${current.toLocaleDateString('tr-TR',{month:'short'})}</small>`;
+                    calendarGrid.appendChild(day);
+                }
+                current.setDate(current.getDate() + INTERVAL_DAYS);
+            }
+        }
+
+        function renderUpcoming() {
+            upcomingList.innerHTML = '';
+            let current = new Date(startDate);
+            const today = new Date(); today.setHours(0,0,0,0);
+            let count = 0;
+            while (count < 5 && current.getFullYear() <= MAX_YEAR) {
+                if (current >= today) {
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `<div class="date-box"><b>${current.toLocaleDateString('tr-TR')}</b><br><small>${current.toLocaleDateString('tr-TR',{weekday:'long'})}</small></div><span class="tag pink">İğne Günü</span>`;
+                    upcomingList.appendChild(item);
+                    count++;
+                }
+                current.setDate(current.getDate() + INTERVAL_DAYS);
+            }
+        }
+
+        document.getElementById('settings-btn').onclick = () => settingsModal.classList.remove('hidden');
+        document.getElementById('close-settings').onclick = () => settingsModal.classList.add('hidden');
+        document.getElementById('save-settings').onclick = () => {
+            if(startDateInput.value) {
+                startDate = startDateInput.value;
+                localStorage.setItem('igne_start_date', startDate);
+                settingsModal.classList.add('hidden');
+                updateUI();
+            }
+        };
+        document.getElementById('dismiss-alarm').onclick = () => alarmOverlay.classList.add('hidden');
+        document.getElementById('enable-notifications').onclick = () => {
+            Notification.requestPermission().then(p => { if(p==='granted') alert('Aktif!'); });
+        };
+        yearSelect.onchange = renderCalendar;
+        window.onload = init;
+    </script>
 </body>
 </html>
