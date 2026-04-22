@@ -1,3 +1,114 @@
+// Mesaj Listesi
+const messages = [
+    "💧 Bugün yeterince su içmeyi unutma!",
+    "✨ Harika bir gün dilerim, her şey yolunda gidecek.",
+    "🚫 Bugün polenler yoğun olabilir, dikkatli ol.",
+    "🍎 Sağlıklı beslenmek vücudunu güçlendirir.",
+    "🧴 Elleri sık sık yıkamak mikroplardan korur.",
+    "🌈 Gülümsemek en güzel ilaçtır!",
+    "🚶‍♂️ Kısa bir yürüyüş sana çok iyi gelebilir.",
+    "🧸 Kızın için en iyisini yapıyorsun, unutma.",
+    "☀️ Güneşli havalarda güneş kremi kullanmayı ihmal etme.",
+    "🥗 Sebze ağırlıklı beslenmek enerji verir.",
+    "😴 Düzenli uyku bağışıklık sistemini destekler.",
+    "📚 Bugün kızına bir masal okumaya ne dersin?",
+    "💖 Kendine zaman ayırmayı unutma, sen değerlisin.",
+    "🧼 Temiz hava her zaman iyi gelir, odayı havalandır.",
+    "🧘‍♀️ Derin bir nefes al ve rahatla.",
+    "🍯 Bir kaşık bal boğazı yumuşatır.",
+    "🥛 Kalsiyum kemik gelişimi için çok önemlidir.",
+    "🍓 Mevsim meyveleri en sağlıklı atıştırmalıktır.",
+    "🦋 Değişim yavaş yavaş gerçekleşir, sabırlı ol.",
+    "🌸 Bahar aylarında alerjilere karşı tedbirli ol.",
+    "🎨 Birlikte resim yapmak hayal gücünü geliştirir.",
+    "🎶 Müzik dinlemek ruhu dinlendirir.",
+    "🚲 Açık havada hareket etmek zinde tutar.",
+    "🏠 Evinizdeki huzur en büyük hazinedir.",
+    "🧠 Yeni bir şeyler öğrenmek zihni genç tutar.",
+    "🍵 Bitki çayları sakinleştirici etki yapar.",
+    "🦷 Diş fırçalamayı eğlenceli bir oyuna dönüştür.",
+    "🌻 Her zorluktan sonra bir kolaylık vardır.",
+    "🧡 Sevgi paylaştıkça çoğalır.",
+    "💪 Güçlü bir bağışıklık için C vitamini şart.",
+    "🥤 Şekerli içeceklerden uzak durmaya çalış.",
+    "🧶 Hobilerinle ilgilenmek stresi azaltır.",
+    "🧸 Kızının en sevdiği oyuncağıyla oyun kur.",
+    "🥧 Ev yapımı yiyecekler her zaman daha sağlıklıdır.",
+    "🚿 Ilık bir duş kasları rahatlatır.",
+    "🛹 Hareketli yaşam sağlıklı bir kalbin anahtarıdır.",
+    "🪁 Gökyüzüne bakmak ufku açar.",
+    "🎈 Küçük mutlulukların peşinden git.",
+    "🧄 Sarımsak doğal bir antibiyotiktir.",
+    "🧅 Soğan bağışıklığı güçlendiren mucizevi bir besindir.",
+    "🥜 Kuruyemişler zihin gelişimi için faydalıdır.",
+    "🥦 Brokoli tam bir vitamin deposudur.",
+    "🥕 Havuç göz sağlığı için vazgeçilmezdir.",
+    "🥑 Avokado sağlıklı yağlar içerir.",
+    "🥚 Yumurta en kaliteli protein kaynağıdır.",
+    "🐟 Haftada bir balık yemek beyin için iyidir.",
+    "🌾 Tam tahıllı ürünler tokluk hissi verir.",
+    "🍬 Paketli gıdaların içeriğine dikkat et.",
+    "🥛 Yoğurt sindirim sistemi için dosttur.",
+    "🧀 Peynir kemikleri güçlendiren kalsiyumdur.",
+    "🧤 Soğuk havalarda ellerini ve boynunu koru.",
+    "🧣 Atkı takmak boğaz ağrısını önler.",
+    "☔ Yağmurlu günlerde sıcacık bir çorba iç.",
+    "⚡ Enerjini yüksek tutmak için olumlu düşün.",
+    "🌟 Bugün senin parladığın gün olsun.",
+    "🤝 Yardımlaşmak dünyayı güzelleştirir.",
+    "🕊️ İç huzurunu korumaya odaklan.",
+    "🕰️ Zamanı verimli kullanmak stresi önler.",
+    "📱 Ekran süresini kısıtlamak gözleri dinlendirir.",
+    "🌳 Doğa ile iç içe olmak negatif enerjiyi atar.",
+    "🐚 Deniz havası ciğerlere iyi gelir.",
+    "⛰️ Temiz dağ havası zihni berraklaştırır.",
+    "🏕️ Doğada vakit geçirmek ruhu tazeler.",
+    "🎢 Hayat iniş ve çıkışlarla doludur, tadını çıkar.",
+    "🎡 Eğlenmek için her zaman bir neden bulabilirsin.",
+    "🎁 Beklenmedik sürprizler günü güzelleştirir.",
+    "🕯️ Loş bir ortamda dinlenmek uykuyu getirir.",
+    "🛌 Yatağa girmeden önce tüm teknolojik cihazları bırak.",
+    "🥛 Yatmadan önce içilen ılık süt rahatlatır.",
+    "💤 Kaliteli bir uyku için oda karanlık olmalı.",
+    "⏰ Sabah erken kalkmak güne enerjik başlatır.",
+    "🍳 Kahvaltı günün en önemli öğünüdür.",
+    "☕ Bir fincan kahve odaklanmayı artırır.",
+    "🍃 Nane çayı mideyi rahatlatır.",
+    "🍋 Limonlu su vücudu toksinlerden arındırır.",
+    "🥥 Hindistan cevizi yağı cildi besler.",
+    "🥨 Ara öğünlerde sağlıklı seçimler yap.",
+    "🍫 Bitter çikolata mutluluk hormonu salgılatır.",
+    "🍿 Film izlerken mısırı yağsız patlatmayı dene.",
+    "🍧 Dondurma yerken aşırıya kaçmamaya dikkat.",
+    "🍇 Üzüm kan yapıcı özelliğe sahiptir.",
+    "🍈 Kavun yaz aylarında harika bir ferahlatıcıdır.",
+    "🍉 Karpuz vücudun su ihtiyacını karşılar.",
+    "🍑 Şeftali lifli yapısıyla sindirime yardımcıdır.",
+    "🍒 Kiraz antioksidan kaynağıdır.",
+    "🍍 Ananas ödem atmaya yardımcı olur.",
+    "🥝 Kivi C vitamini bombasıdır.",
+    "🍅 Domates cildi güneşin etkilerinden korur.",
+    "🥔 Patatesi haşlanmış olarak tüketmek daha iyidir.",
+    "🍆 Patlıcan lif açısından zengindir.",
+    "🥒 Salatalık ferahlatıcı ve düşük kalorilidir.",
+    "🫑 Biberler bağışıklığı destekleyen vitaminler içerir.",
+    "🌿 Maydanoz vücudu arındırır.",
+    "☘️ Taze otlar yemeklere lezzet ve sağlık katar.",
+    "🥣 Kışın mercimek çorbası içmek şifadır.",
+    "🥢 Farklı kültürlerin mutfaklarını dene.",
+    "🥧 Anne eli değmiş gibi lezzetli ve sağlıklı yemekler yap.",
+    "🥘 Tencere yemekleri her zaman daha besleyicidir.",
+    "🥡 Dışarıdan yemek yerine evde hazırlamayı seç.",
+    "🥤 Taze sıkılmış meyve suları enerji verir.",
+    "🍹 Alkolsüz ve şekersiz kokteyller hazırla.",
+    "🍦 Evde meyveli yoğurt yaparak dondurmaya alternatif üret.",
+    "🧁 Şeker miktarını azaltarak tatlılar yap.",
+    "🍭 Şekerlemeler yerine kuru meyveleri tercih et.",
+    "🍬 Bayram tadında her günü kutla.",
+    "💖 Sen harika bir ebeveynsin, kendine güven.",
+    "🌈 Yarın bugün olduğundan daha güzel olacak."
+];
+
 // Configuration
 const INTERVAL_DAYS = 28;
 const MAX_YEAR = 2030;
@@ -26,6 +137,7 @@ let startDate = localStorage.getItem('igne_start_date') || null;
 // DOM Elements
 const daysLeftEl = document.getElementById('days-left');
 const nextDateStrEl = document.getElementById('next-date-str');
+const tickerContent = document.getElementById('ticker-content');
 const mondayWarningEl = document.getElementById('monday-warning');
 const yearSelect = document.getElementById('year-select');
 const calendarGrid = document.getElementById('calendar-grid');
@@ -41,6 +153,7 @@ const dismissAlarmBtn = document.getElementById('dismiss-alarm');
 // Initialize
 function init() {
     populateYearSelect();
+    startTicker();
     if (startDate) {
         updateUI();
     } else {
@@ -57,6 +170,19 @@ function populateYearSelect() {
         yearSelect.appendChild(opt);
     }
     yearSelect.value = currentYear;
+}
+
+function startTicker() {
+    let index = 0;
+    const updateTicker = () => {
+        tickerContent.style.animation = 'none';
+        tickerContent.offsetHeight; // Trigger reflow
+        tickerContent.style.animation = 'slideUp 0.5s ease-out';
+        tickerContent.textContent = messages[index];
+        index = (index + 1) % messages.length;
+    };
+    updateTicker();
+    setInterval(updateTicker, 6000); // 6 saniyede bir değişir
 }
 
 // Logic

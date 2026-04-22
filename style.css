@@ -81,6 +81,32 @@ h1 {
     transform: scale(0.9);
 }
 
+.ticker-wrapper {
+    margin-bottom: 20px;
+    padding: 12px 20px;
+    overflow: hidden;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.ticker-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+    width: 100%;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
