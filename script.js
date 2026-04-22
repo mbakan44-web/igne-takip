@@ -166,9 +166,26 @@ function renderUpcoming() {
     });
 }
 
+const enableNotificationsBtn = document.getElementById('enable-notifications');
+
 // Events
 settingsBtn.onclick = () => settingsModal.classList.remove('hidden');
 closeSettingsBtn.onclick = () => settingsModal.classList.add('hidden');
+
+enableNotificationsBtn.onclick = () => {
+    if (!("Notification" in window)) {
+        alert("Bu tarayıcı bildirimleri desteklemiyor.");
+        return;
+    }
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            alert("Bildirimler başarıyla etkinleştirildi!");
+            sendNotification("Tebrikler!", "Bildirimler artık aktif. İğne günlerinde buradan uyarılacaksınız.");
+        } else {
+            alert("Bildirim izni reddedildi. Lütfen tarayıcı ayarlarından izin verin.");
+        }
+    });
+};
 
 saveSettingsBtn.onclick = () => {
     const val = startDateInput.value;
