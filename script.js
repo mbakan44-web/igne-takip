@@ -2,6 +2,24 @@
 const INTERVAL_DAYS = 28;
 const MAX_YEAR = 2030;
 
+// Bildirim İzni ve Kaydı
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}
+
+function sendNotification(title, body) {
+    if (Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification(title, {
+                body: body,
+                icon: 'https://cdn-icons-png.flaticon.com/512/2966/2966327.png',
+                vibrate: [200, 100, 200],
+                tag: 'igne-takip-bildirim'
+            });
+        });
+    }
+}
+
 // State
 let startDate = localStorage.getItem('igne_start_date') || null;
 
@@ -87,6 +105,7 @@ function updateUI() {
     const isMonday = today.getDay() === 1; // 1 is Monday
     if (isMonday) {
         mondayWarningEl.classList.remove('hidden');
+        sendNotification("Haftalık Hatırlatma", "Bugün Pazartesi, kızınızın aşısını vurdurmayı unutmayın!");
     } else {
         mondayWarningEl.classList.add('hidden');
     }
@@ -94,6 +113,7 @@ function updateUI() {
     // Alarm Check (Injection Day)
     if (diffDays === 0) {
         alarmOverlay.classList.remove('hidden');
+        sendNotification("ACİL: İĞNE GÜNÜ!", "Lütfen bugün kızınızın iğnesini yaptırmayı unutmayın.");
     }
 
     renderCalendar();
